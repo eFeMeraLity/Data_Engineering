@@ -1,7 +1,5 @@
 import pulsar
-import logging
 
-logging.info('Connecting to Pulsar...')
 
 # Create a pulsar client by supplying ip address and port
 client = pulsar.Client("pulsar://localhost:6650")
@@ -9,8 +7,6 @@ client = pulsar.Client("pulsar://localhost:6650")
 # Create a producer on the topic that consumer can subscribe to
 Topic = "persistent://DEII-tenant/DEII-namespace/DEII-L1T4"
 producer = client.create_producer(Topic)
-
-logging.info('Connected to Pulsar')
 
 
 def conversion(substring, operation):
@@ -43,10 +39,10 @@ INPUT_STRING = "I want to be capitalized"
 
 split_string = INPUT_STRING.split(" ")
 
-logging.info('Sending Messages ...')
-
 # Send a message to consumer
-producer.send(split_string.encode('utf-8'))
+for i in range(len(split_string)):
+    upper_case_string = conversion(split_string[i], function)
+    producer.send(upper_case_string.encode("utf-8"))
 
 # Destroy pulsar client
 client.close()
